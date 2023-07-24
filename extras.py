@@ -17,7 +17,7 @@ def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
             f'|{menu:^{tamanho}}| \n'
             f'+{"=" * tamanho}+')
         for key, value in opt_dict.items():
-            print(f'|{f" [{key}] - {value}":{tamanho}}|')
+            print(f'|{f" [{key}] - {value.capitalize()}":{tamanho}}|')
         print(f'+{"=" * tamanho}+')
         # ---------------------------------------------------------- PRINT
     
@@ -30,4 +30,4 @@ def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
 
 
 if __name__ == '__main__':
-    menu('1:OPÇÃO 1', '2:OPÇÃO 2', '3:OPÇÃO3')
+    menu()
