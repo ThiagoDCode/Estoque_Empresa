@@ -1,28 +1,38 @@
 from extras import menu
 import lib_functions as func
 import connect_banco as con
+import AREA_TESTE as teste
 from time import sleep
 import os
 
 
 while True:
-    match menu():
-        case 5:
+    match menu('1:Novo Registro', '2:Consultar Registro', '3:Atualizar Registro', '4:Deletar Registro', '5:Desconectar'):
+        case 'Desconectar':
             os.system('cls')
             print('\nPROGRAMA FINALIZADO! \n')
             sleep(1.5)
             break
 
-        case 1:
+        case 'Novo Registro':
             func.insert_register()
         
-        case 2:
-            func.consult_register()
-        
-        case 3:
+        case 'Consultar Registro':
+            while True:
+                match menu('1:Tabela Geral', '2:Identificação ou Serial', '3:Cancelar', menu='OPÇÕES DE CONSULTA'):
+                    case 'Cancelar':
+                        break
+                    
+                    case 'Tabela Geral':
+                        teste.consult_register_teste()
+                    
+                    case 'Identificação ou Serial':
+                        print()
+                    
+        case 'Atualizar Registro':
             func.update_register()
         
-        case 4:
+        case 'Deletar Registro':
             func.delete_register()
 
 

@@ -2,33 +2,32 @@ from time import sleep
 import os
 
 
-def menu():
+def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
+    opt_dict = {}
+    for opt in options:
+        opt_dict[opt.split(':')[0]] = opt.split(':')[1]
+            
     while True:
         os.system('cls')
     
-        tamanho = 50
+        tamanho = 30
         # PRINT ----------------------------------------------------------
         print(
             f'+{"=" * tamanho}+ \n'
-            f'|{"OPÇÕES DE REGISTRO":^{tamanho}}| \n'
+            f'|{menu:^{tamanho}}| \n'
             f'+{"=" * tamanho}+')
-        print(
-            f'| [1] Novo Registro         [2] Consultar Registro | \n'
-            f'| [3] Atualizar Registro    [4] Deletar Registro   | \n'
-            f'| [5] Desconectar                                  |')
+        for key, value in opt_dict.items():
+            print(f'|{f" [{key}] - {value}":{tamanho}}|')
         print(f'+{"=" * tamanho}+')
         # ---------------------------------------------------------- PRINT
     
-        try:
-            entry = int(input('digite a opção: '))
-            if entry < 0 or entry > 6:
-                raise Exception()
-        except (ValueError, Exception):
-            print('Opção inválida, tente novamente...\n')
-            sleep(1)
-        else:
-            return entry
+        entry = input('digite a opção: ')
+        if opt_dict.get(entry):
+            return opt_dict[entry]
+        
+        print('Opção inválida, tente novamente...\n')
+        sleep(1)
 
 
 if __name__ == '__main__':
-    menu()
+    menu('1:OPÇÃO 1', '2:OPÇÃO 2', '3:OPÇÃO3')
