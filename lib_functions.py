@@ -39,6 +39,7 @@ def consult_register():
             os.system('pause')
             os.system('cls')
     print(' SEM MAIS RESULTADOS '.center(50, '-'))
+    print()
     os.system('pause')
 
 
@@ -59,6 +60,7 @@ def consult_for_ident():
             os.system('pause')
             os.system('cls')
     print(' SEM MAIS RESULTADOS '.center(50, '-'))
+    print()
     os.system('pause')
 
 
