@@ -33,7 +33,7 @@ def query(conexao, sql):
         print(erro)
         os.system('pause')
     else:
-        print('Registro realizado com sucesso!')
+        print('\nREGISTRO REALIZADO COM SUCESSO!\n')
         sleep(1.5)
 
 
