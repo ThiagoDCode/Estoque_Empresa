@@ -7,28 +7,28 @@ from time import sleep
 # Conexão com o Banco
 def connect_banco():
     caminho = 'db_estoque\\estoque.db'
-    conexao = None
+    connection = None
 
     try:
-        conexao = sqlite3.connect(caminho)
+        connection = sqlite3.connect(caminho)
         os.system('cls')
         print('\nConexão Estabelecida! \n')
         sleep(1.5)
     except Error as erro:
         print(erro)
 
-    return conexao
+    return connection
 
 
-conexao_on = connect_banco()
+connection_ON = connect_banco()
 
 
 # QUERY para instruções: INSERT / UPDATE / DELETE
-def query(conexao, sql):
+def query(connection_db, sql):
     try:
-        connect = conexao.cursor()
+        connect = connection_db.cursor()
         connect.execute(sql)
-        conexao.commit()
+        connection_db.commit()
     except Error as erro:
         print(erro)
         os.system('pause')
@@ -38,8 +38,8 @@ def query(conexao, sql):
 
 
 # QUERY para instrução: SELECT
-def query_select(conexao, sql):
-    connect = conexao.cursor()
+def query_select(connection_db, sql):
+    connect = connection_db.cursor()
     connect.execute(sql)
     resposta = connect.fetchall()
 

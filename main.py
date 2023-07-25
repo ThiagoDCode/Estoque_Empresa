@@ -14,7 +14,7 @@ while True:
             print('\nPROGRAMA FINALIZADO! \n')
             sleep(1.5)
             break
-
+        
         case 'NOVO REGISTRO':
             func.insert_register()
         
@@ -25,16 +25,16 @@ while True:
                         break
                     
                     case 'TABELA GERAL':
-                        func.consult_for()
+                        func.consult_register()
                     
                     case 'DESCRIÇÃO OU SERIAL':
-                        func.consult_for(identity=True)
-                    
+                        func.consult_register(identity=True)
+    
         case 'ATUALIZAR REGISTRO':
             func.update_register()
-        
+    
         case 'DELETAR REGISTRO':
             func.delete_register()
 
 
-ON.conexao_on.close()
+ON.connection_ON.close()

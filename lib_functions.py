@@ -3,6 +3,8 @@ import os
 
 
 def insert_register():
+    """ Adiciona novo item ao Banco de Dados
+    """
     os.system('cls')
 
     description = input('Descrição do item: ')
@@ -20,10 +22,15 @@ def insert_register():
     VALUES ('{description}', '{serial}', {quantity}, {price})
     """
 
-    ON.query(ON.conexao_on, tab_sql)
+    ON.query(ON.connection_ON, tab_sql)
 
 
-def consult_for(identity=False):
+def consult_register(identity=False):
+    """ Consulta e imprime os dados do Banco de Dados
+
+    Args:
+        identity (bool, optional): Se True, habilita a consulta por dados específicos. Defaults to False.
+    """
     os.system('cls')
     
     if identity:
@@ -33,15 +40,15 @@ def consult_for(identity=False):
         SELECT * FROM tb_estoque 
             WHERE item_identity LIKE "%{description}%" 
             OR serial_item LIKE "%{description}%"'''
-        response = ON.query_select(ON.conexao_on, tab_sql)
+        response = ON.query_select(ON.connection_ON, tab_sql)
     else:
         tb_sql = 'SELECT * FROM tb_estoque'
-        response = ON.query_select(ON.conexao_on, tb_sql)
+        response = ON.query_select(ON.connection_ON, tb_sql)
 
     limit = 5
     for cont, resp in enumerate(response):
         print('=' * 60)
-        print(f'|{resp[0]:>5}| {resp[1]:<30} Serial N°: {resp[2]:<9}|')
+        print(f'|{resp[0]:^3}| {resp[1]:^30} |Serial N°: {resp[2]:^10}|')
         print('-' * 60)
         print(f'Quantidade: {resp[3]:<4} Preço: R${resp[4]:<4.2f} \n')
         
@@ -57,38 +64,34 @@ def consult_for(identity=False):
 
 def update_register():
     os.system('cls')
+    
+    id = input('Digite o ID do registro a ser alterado: ')
+    response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id)
 
-    id = input('ID do registro a ser alterado: ')
-    result = ON.query_select(ON.conexao_on, 'SELECT *FROM tb_estoque WHERE ID_item='+id)
-    r_item = result[0][1]
-    r_serial = result[0][2]
-    r_quantity = result[0][3]
-    r_price = result[0][4]
-
-    item = input('Descrição do item: ')
-    serial = input('Serial do item: ')
-    quantity = input('Quantidade para registro: ')
-    price = input('Preço do item: ')
-
-    if len(item) == 0:
-        item = r_item
-    if len(serial) == 0:
-        serial = r_serial
-    if len(str(quantity)) == 0:
-        quantity = r_quantity
-    if len(str(price)) == 0:
-        price = r_price
-
-    tb_sql = f"""
+    # PRINT ------------------------------------------------------------------------
+    for resp in response:
+        dados_item = [resp[0], resp[1], resp[2], resp[3], resp[4]]
+        print('=' * 60)
+        print(f'|{resp[0]:^3}| {resp[1]:^30} |Serial N°: {resp[2]:^10}|')
+        print('-' * 60)
+        print(f'Quantidade: {resp[3]:<4} Preço: R${resp[4]:<4.2f} \n')
+    # ------------------------------------------------------------------------ PRINT
+    
+    new_item = input('Alterar descrição do item? ')
+    new_serial = input('Alterar serial do item? ')
+    new_quantity = input('Alterar quantidade do registro? ')
+    new_price = input('Altear preço do item? ')
+    
+    tab_sql = f"""
     UPDATE tb_estoque SET
-        item_identity='{item}',
-        serial_item='{serial}',
-        quantity='{int(quantity)}',
-        price_unit='{float(price)}'
+        item_identity='{new_item if len(new_item) != 0 else dados_item[1]}',
+        serial_item='{new_serial if len(new_serial) != 0 else dados_item[2]}',
+        quantity='{int(new_quantity) if len(new_quantity) != 0 else int(dados_item[3])}',
+        price_unit='{float(new_price) if len(new_price) != 0 else float(dados_item[4])}'
     WHERE ID_item={id}
     """
-
-    ON.query(ON.conexao_on, tb_sql)
+    
+    ON.query(ON.connection_ON, tab_sql)
 
 
 def delete_register():
@@ -97,4 +100,4 @@ def delete_register():
     id = input('ID do registro a ser deletado: ')
     tb_sql = f'DELETE FROM tb_estoque WHERE ID_item={id}'
 
-    ON.query(ON.conexao_on, tb_sql)
+    ON.query(ON.connection_ON, tb_sql)
