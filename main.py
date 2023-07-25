@@ -28,7 +28,7 @@ while True:
                         func.consult_register()
                     
                     case 'DESCRIÇÃO OU SERIAL':
-                        func.consult_register(identity=True)
+                        func.consult_register(description_item=True)
     
         case 'ATUALIZAR REGISTRO':
             func.update_register()
