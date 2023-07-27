@@ -3,7 +3,7 @@ from time import sleep
 import os
 
 
-def insert_register():
+def new_register():
     """ Adiciona novo item ao Banco de Dados
     """
     os.system('cls')
@@ -113,7 +113,7 @@ def tabela(response_sql, id=False):
         response_sql (list): Lista dos dados do retorno do SQL.
         id (bool, optional): Se True, define a impressão de dado único. Defaults to False.
     """
-    
+
     if id:
         for resp in response_sql:
             print('=' * 60)

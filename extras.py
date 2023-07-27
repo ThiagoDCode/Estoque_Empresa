@@ -6,7 +6,7 @@ def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
     opt_dict = {}
     for opt in options:
         opt_dict[opt.split(':')[0]] = opt.split(':')[1]
-            
+  
     while True:
         os.system('cls')
     
@@ -20,11 +20,11 @@ def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
             print(f'|{f" [{key}] - {value.capitalize()}":{tamanho}}|')
         print(f'+{"=" * tamanho}+')
         # ---------------------------------------------------------- PRINT
-    
+
         entry = input('digite a opção: ')
         if opt_dict.get(entry):
             return opt_dict[entry]
-        
+    
         print('Opção inválida, tente novamente...\n')
         sleep(1)
 

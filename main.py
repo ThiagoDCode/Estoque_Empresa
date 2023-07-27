@@ -11,13 +11,11 @@ while True:
     match menu('1:NOVO REGISTRO', '2:CONSULTAR REGISTRO', '3:ATUALIZAR REGISTRO', '4:DELETAR REGISTRO', '5:DESCONECTAR'):
         case 'DESCONECTAR':
             os.system('cls')
-            print('\nPROGRAMA FINALIZADO! \n')
-            sleep(1.5)
             break
-        
+    
         case 'NOVO REGISTRO':
-            func.insert_register()
-        
+            func.new_register()
+
         case 'CONSULTAR REGISTRO':
             while True:
                 match menu('1:TABELA GERAL', '2:DESCRIÇÃO OU SERIAL', '3:CANCELAR', menu='OPÇÕES DE CONSULTA'):
