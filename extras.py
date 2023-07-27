@@ -29,5 +29,17 @@ def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
         sleep(1)
 
 
+def number_check(txt:str, type=int):
+    while True:
+        entry = input(txt).strip()
+        if entry == '':
+            break
+        
+        if entry.replace('.', '', 1).isdigit():
+            return type(entry)
+        else:
+            print('Valor inválido, tente novamente...')
+
+
 if __name__ == '__main__':
     menu()

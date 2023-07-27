@@ -1,4 +1,6 @@
 import connect_banco as ON
+import extras as EX
+from sqlite3 import Error
 from time import sleep
 import os
 
@@ -6,27 +8,39 @@ import os
 def new_register():
     """ Adiciona novo item ao Banco de Dados
     """
-    os.system('cls')
 
-    description = input('Descrição do item: ')
-    serial = input('Número serial do item: ')
-    quantity = int(input('Quantidade para registro: '))
-    price = float(input('Preço do item: R$'))
+    while True:
+        os.system('cls')
+        
+        description = input('Descrição do item: ')
+        serial = input('Número serial do item: ')
+        quantity = int(input('Quantidade para registro: '))
+        price = float(input('Preço do item: R$'))
+    
+        insert = input('\nFazer o INSERT dos dados ( S/N )? ').upper()
+        if insert == 'S':
+            tab_sql = f"""
+            INSERT INTO tb_estoque (
+                item_identity,
+                serial_item,
+                quantity,
+                price_unit
+            )
+            VALUES ('{description}', '{serial}', {quantity}, {price})
+            """
 
-    tab_sql = f"""
-    INSERT INTO tb_estoque (
-        item_identity,
-        serial_item,
-        quantity,
-        price_unit
-    )
-    VALUES ('{description}', '{serial}', {quantity}, {price})
-    """
-
-    ON.query(ON.connection_ON, tab_sql)
+            ON.query(ON.connection_ON, tab_sql)
+        else:
+            print('\nINSERT cancelado!\n')
+            sleep(1.5)
+        
+        os.system('cls')
+        new_register = input('Adicionar um novo registro ( S/N )? ').upper()
+        if new_register == 'N':
+            break
 
 
-def consult_register(description_item=False):
+def consult_register():
     """ Faz a consulta dos dados no Banco de Dados SQL.
 
     Args:
@@ -34,55 +48,61 @@ def consult_register(description_item=False):
     """
     os.system('cls')
 
-    if description_item:
-        description = input('Descrição ou serial do item: ')
-        
-        tab_sql = f'''
-        SELECT * FROM tb_estoque 
-            WHERE item_identity LIKE "%{description}%" 
-            OR serial_item LIKE "%{description}%"'''
-        response = ON.query_select(ON.connection_ON, tab_sql)
-        
-        # PRINT -------------------------------------------------------------------
-        tabela(response)
-        # ------------------------------------------------------------------- PRINT
+    description = input('Descrição ou serial do item: ')
+    
+    if description:
+        try:
+            tab_sql = f'''
+            SELECT * FROM tb_estoque 
+                WHERE item_identity LIKE "%{description}%" 
+                OR serial_item LIKE "%{description}%"'''
+            response = ON.query_select(ON.connection_ON, tab_sql)
+            
+            # PRINT -------------------------------------------------------------------
+            tabela(response)
+            # ------------------------------------------------------------------- PRINT
+        except Error as erro:
+            print(erro)
     else:
-       tab_sql = 'SELECT * FROM tb_estoque'
-       response = ON.query_select(ON.connection_ON, tab_sql)
-       
-       # PRINT -------------------------------------------------------------------
-       tabela(response)
-       # ------------------------------------------------------------------- PRINT
+        try:
+            tab_sql = 'SELECT * FROM tb_estoque'
+            response = ON.query_select(ON.connection_ON, tab_sql)
+            
+            # PRINT -------------------------------------------------------------------
+            tabela(response)
+            # ------------------------------------------------------------------- PRINT
+        except Error as erro:
+            print(erro)
+
 
 
 def update_register():
     """ Faz a consulta no Banco de Dados para atualização do item.
     """
     os.system('cls')
-    
+
     id = input('Digite o ID do registro a ser alterado: ')
     response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id)
-    dados_item = [response[0][1], response[0][2], response[0][3], response[0][4]]
-    
+
     # PRINT -------------------------------------------------------------------
     tabela(response, id=True)
     # ------------------------------------------------------------------- PRINT
+
+    new_item = [input('Alterar descrição do item? '), 'item_identity']
+    new_serial = [input('Alterar serial do item? '), 'serial_item']
+    new_quantity = [EX.number_check('Alterar quantidade do registro? '), 'quantity']
+    new_price = [EX.number_check('Altear preço do item? ', type=float), 'price_unit']
+
+    done_up = False
+    for value, coluna in [new_item, new_serial, new_quantity, new_price]:
+        if value:
+            done_up = True
+            tab_sql = f'UPDATE tb_estoque SET "{coluna}"="{value}" WHERE ID_item={id}'
+            ON.query(ON.connection_ON, tab_sql)
     
-    new_item = input('Alterar descrição do item? ')
-    new_serial = input('Alterar serial do item? ')
-    new_quantity = input('Alterar quantidade do registro? ')
-    new_price = input('Altear preço do item? ')
-    
-    tab_sql = f"""
-    UPDATE tb_estoque SET
-        item_identity='{new_item if len(new_item) != 0 else dados_item[0]}',
-        serial_item='{new_serial if len(new_serial) != 0 else dados_item[1]}',
-        quantity='{int(new_quantity) if len(new_quantity) != 0 else int(dados_item[2])}',
-        price_unit='{float(new_price) if len(new_price) != 0 else float(dados_item[3])}'
-    WHERE ID_item={id}
-    """
-    
-    ON.query(ON.connection_ON, tab_sql)
+    if not done_up:
+        print('\nNenhuma atualização feita no registro!\n')
+        sleep(1.5)
 
 
 def delete_register():
@@ -113,7 +133,8 @@ def tabela(response_sql, id=False):
         response_sql (list): Lista dos dados do retorno do SQL.
         id (bool, optional): Se True, define a impressão de dado único. Defaults to False.
     """
-
+    
+    print()
     if id:
         for resp in response_sql:
             print('=' * 60)

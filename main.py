@@ -18,15 +18,12 @@ while True:
 
         case 'CONSULTAR REGISTRO':
             while True:
-                match menu('1:TABELA GERAL', '2:DESCRIÇÃO OU SERIAL', '3:CANCELAR', menu='OPÇÕES DE CONSULTA'):
+                match menu('1:CONSULTAR TABELA', '2:CANCELAR', menu='OPÇÕES DE CONSULTA'):
                     case 'CANCELAR':
                         break
                     
-                    case 'TABELA GERAL':
+                    case 'CONSULTAR TABELA':
                         func.consult_register()
-                    
-                    case 'DESCRIÇÃO OU SERIAL':
-                        func.consult_register(description_item=True)
     
         case 'ATUALIZAR REGISTRO':
             func.update_register()
