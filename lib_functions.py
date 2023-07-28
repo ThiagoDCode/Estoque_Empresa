@@ -12,13 +12,21 @@ def new_register():
     while True:
         os.system('cls')
         
-        description = input('Descrição do item: ')
-        serial = input('Número serial do item: ')
-        quantity = int(input('Quantidade para registro: '))
-        price = float(input('Preço do item: R$'))
+        description = input('Descrição do item: ').strip()
+        if not description:
+            print('\nÉ necessário preencher a descrição do item!\n')
+            os.system('pause')
+            continue
+        serial = input('Número serial do item: ').strip()
+        quantity = EX.number_check('Quantidade para registro: ', type=int)
+        if not quantity:
+            quantity = 0
+        price = EX.number_check('Preço do item: R$', type=float)
+        if not price:
+            price = 0.0
     
-        insert = input('\nFazer o INSERT dos dados ( S/N )? ').upper()
-        if insert == 'S':
+        insert = EX.validate_entry('\nFazer o INSERT dos dados ( S/N )? ', 'S', 'N')
+        if insert:
             tab_sql = f"""
             INSERT INTO tb_estoque (
                 item_identity,
@@ -28,15 +36,14 @@ def new_register():
             )
             VALUES ('{description}', '{serial}', {quantity}, {price})
             """
-
             ON.query(ON.connection_ON, tab_sql)
         else:
             print('\nINSERT cancelado!\n')
             sleep(1.5)
         
         os.system('cls')
-        new_register = input('Adicionar um novo registro ( S/N )? ').strip().upper()
-        if new_register == 'N':
+        new_register = EX.validate_entry('Adicionar um novo registro ( S/N )? ', 'S', 'N')
+        if not new_register:
             break
 
 
@@ -48,9 +55,9 @@ def consult_register():
     """
     while True:
         os.system('cls')
-
+    
         description = input('Descrição ou serial do item: ')
-        
+
         if description:
             try:
                 tab_sql = f'''
@@ -161,7 +168,6 @@ def tabela(response_sql, id=False):
         response_sql (list): Lista dos dados do retorno do SQL.
         id (bool, optional): Se True, define a impressão de dado único. Defaults to False.
     """
-    
     print()
     if id:
         for resp in response_sql:
