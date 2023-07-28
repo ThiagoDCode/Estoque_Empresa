@@ -1,3 +1,4 @@
+import extras as EX
 import os
 import sqlite3
 from sqlite3 import Error
@@ -15,7 +16,7 @@ def connect_banco():
         print('\nConexão Estabelecida! \n')
         sleep(1.5)
     except Error as erro:
-        print(erro)
+        print(EX.error(erro))
 
     return connection
 
@@ -30,7 +31,7 @@ def query(connection_db, sql):
         connect.execute(sql)
         connection_db.commit()
     except Error as erro:
-        print(erro)
+        print(EX.error(erro))
         os.system('pause')
     else:
         print('\nREGISTRO REALIZADO COM SUCESSO!\n')

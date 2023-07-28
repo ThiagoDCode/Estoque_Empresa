@@ -73,7 +73,7 @@ def consult_register():
                 tabela(response)
                 # ------------------------------------------------------------------- PRINT
             except Error as erro:
-                print(erro)
+                print(EX.error(erro))
         else:
             try:
                 tab_sql = 'SELECT * FROM tb_estoque'
@@ -83,7 +83,7 @@ def consult_register():
                 tabela(response)
                 # ------------------------------------------------------------------- PRINT
             except Error as erro:
-                print(erro)
+                print(EX.error(erro))
 
         os.system('cls')
         new_consult = EX.validate_entry('Nova consulta ( S/N )? ', 'S', 'N')
@@ -101,7 +101,7 @@ def update_register():
             id = input('Digite o ID do registro a ser alterado: ')
             response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id)
         except (Error, TypeError, ValueError):
-            print('\nEntrada inválida!\n')
+            print(EX.error('\nEntrada inválida!\n'))
             sleep(1.5)
         else:
             if not response:

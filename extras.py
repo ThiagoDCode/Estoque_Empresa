@@ -25,7 +25,7 @@ def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
         if opt_dict.get(entry):
             return opt_dict[entry]
     
-        print('Opção inválida, tente novamente...\n')
+        print(error('Opção inválida, tente novamente...\n'))
         sleep(1)
 
 
@@ -47,7 +47,7 @@ def number_check(txt:str, type=int):
         if entry.replace('.', '', 1).isdigit():
             return type(entry)
         else:
-            print('\nEntrada inválido, tente novamente...\n')
+            print(error('\nEntrada inválido, tente novamente...\n'))
 
 
 def validate_entry(txt: str, y, n):
@@ -59,4 +59,8 @@ def validate_entry(txt: str, y, n):
         elif validate == n.upper():
             return False
         else:
-            print(f'Entrada inválida! Por favor, responda apenas com "{y}" ou "{n}"\n')
+            print(error(f'Entrada inválida! Por favor, responda apenas com "{y}" ou "{n}"\n'))
+
+
+def error(txt):
+    return '\033[1;31m' + txt + '\033[m'
