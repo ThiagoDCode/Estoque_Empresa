@@ -47,7 +47,7 @@ def number_check(txt:str, type=int):
         if entry.replace('.', '', 1).isdigit():
             return type(entry)
         else:
-            print('\nValor inválido, tente novamente...\n')
+            print('\nEntrada inválido, tente novamente...\n')
 
 
 def validate_entry(txt: str, y, n):

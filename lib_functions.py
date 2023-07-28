@@ -86,8 +86,8 @@ def consult_register():
                 print(erro)
 
         os.system('cls')
-        new_consult = input('Nova consulta ( S/N )? ').strip().upper()
-        if new_consult == 'N':
+        new_consult = EX.validate_entry('Nova consulta ( S/N )? ', 'S', 'N')
+        if not new_consult:
             break
 
 
@@ -97,36 +97,43 @@ def update_register():
     while True:
         os.system('cls')
 
-        id = input('Digite o ID do registro a ser alterado: ')
-        response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id)
-
-        if not response:
-            print('\nID de registro não encontrado no Banco de Dados!\n')
-            os.system('pause')
+        try:
+            id = input('Digite o ID do registro a ser alterado: ')
+            response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id)
+        except (Error, TypeError, ValueError):
+            print('\nEntrada inválida!\n')
+            sleep(1.5)
         else:
-            # PRINT -------------------------------------------------------------------
-            tabela(response, id=True)
-            # ------------------------------------------------------------------- PRINT
+            if not response:
+                print('\nID de registro não encontrado no Banco de Dados!\n')
+                os.system('pause')
+            else:
+                # PRINT -------------------------------------------------------------------
+                tabela(response, id=True)
+                # ------------------------------------------------------------------- PRINT
 
-            new_item = [input('Alterar descrição do item? ').strip(), 'item_identity']
-            new_serial = [input('Alterar serial do item? ').strip(), 'serial_item']
-            new_quantity = [EX.number_check('Alterar quantidade do registro? '), 'quantity']
-            new_price = [EX.number_check('Altear preço do item? ', type=float), 'price_unit']
+                new_item = [input('Alterar descrição do item? ').strip(), 'item_identity']
+                new_serial = [input('Alterar serial do item? ').strip(), 'serial_item']
+                new_quantity = [EX.number_check('Alterar quantidade do registro? '), 'quantity']
+                new_price = [EX.number_check('Altear preço do item? ', type=float), 'price_unit']
 
-            done_up = False
-            for value, coluna in [new_item, new_serial, new_quantity, new_price]:
-                if value:
-                    done_up = True
-                    tab_sql = f'UPDATE tb_estoque SET "{coluna}"="{value}" WHERE ID_item={id}'
-                    ON.query(ON.connection_ON, tab_sql)
-            
-            if not done_up:
-                print('\nNenhuma atualização feita no registro!\n')
-                sleep(1.5)
+                apply_update = EX.validate_entry('\nAplicar atualização (S/N): ', 'S', 'N')
+                if apply_update:
+                    done_up = False
+                    
+                    for value, coluna in [new_item, new_serial, new_quantity, new_price]:
+                        if value:
+                            done_up = True
+                            tab_sql = f'UPDATE tb_estoque SET "{coluna}"="{value}" WHERE ID_item={id}'
+                            ON.query(ON.connection_ON, tab_sql)
+                
+                    if not done_up:
+                        print('\nNenhuma atualização feita no registro!\n')
+                        sleep(1.5)
         
         os.system('cls')
-        new_update = input('Atualizar outro registro ( S/N )? ').strip().upper()
-        if new_update == 'N':
+        new_update = EX.validate_entry('Atualizar outro registro ( S/N )? ', 'S', 'N')
+        if not new_update:
             break
 
 
@@ -136,28 +143,32 @@ def delete_register():
     while True:
         os.system('cls')
 
-        id = input('ID do registro a ser deletado: ')
-        response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id)
-        
-        if not response:
-            print('\nID de registro não encontrado no Banco de Dados!\n')
-            os.system('pause')
+        try:
+            id = input('ID do registro a ser deletado: ')
+            response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id)
+        except (Error):
+            print('\nAÇÃO CANCELADA!'), sleep(1.5)
+            break
         else:
-            # PRINT -------------------------------------------------------------------
-            tabela(response, id=True)
-            # ------------------------------------------------------------------- PRINT
-            
-            delete = input('Deletar registro (S/N): ').strip().upper()
-            if delete == 'S':
-                tb_sql = f'DELETE FROM tb_estoque WHERE ID_item={id}'
-                ON.query(ON.connection_ON, tb_sql)
+            if not response:
+                print('\nID de registro não encontrado no Banco de Dados!\n')
+                os.system('pause')
             else:
-                print('\nAÇÃO CANCELADA!\n')
-                sleep(1.5)
+                # PRINT -------------------------------------------------------------------
+                tabela(response, id=True)
+                # ------------------------------------------------------------------- PRINT
+                
+                delete = EX.validate_entry('Deletar registro (S/N): ', 'S', 'N')
+                if delete:
+                    tb_sql = f'DELETE FROM tb_estoque WHERE ID_item={id}'
+                    ON.query(ON.connection_ON, tb_sql)
+                else:
+                    print('\nAÇÃO CANCELADA!\n')
+                    sleep(1.5)
         
         os.system('cls')
-        new_delete = input('Deletar outro registro ( S/N )? ').strip().upper()
-        if new_delete == 'N':
+        new_delete = EX.validate_entry('Deletar outro registro ( S/N )? ', 'S', 'N')
+        if not new_delete:
             break
 
 
