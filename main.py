@@ -1,14 +1,16 @@
 from extras import menu
 import lib_functions as func
 import connect_banco as ON
-from time import sleep
 import os
-
-import AREA_TESTE as teste
 
 
 while True:
-    match menu('1:NOVO REGISTRO', '2:CONSULTAR REGISTRO', '3:ATUALIZAR REGISTRO', '4:DELETAR REGISTRO', '5:DESCONECTAR'):
+    match menu('1:NOVO REGISTRO',
+               '2:CONSULTAR REGISTRO',
+               '3:ATUALIZAR REGISTRO',
+               '4:DELETAR REGISTRO',
+               '5:DESCONECTAR'):
+
         case 'DESCONECTAR':
             os.system('cls')
             break
@@ -18,7 +20,7 @@ while True:
 
         case 'CONSULTAR REGISTRO':
             while True:
-                match menu('1:CONSULTAR TABELA', '2:CANCELAR', menu='OPÇÕES DE CONSULTA'):
+                match menu('1:CONSULTAR TABELA', '2:CANCELAR', menu_title='OPÇÕES DE CONSULTA'):
                     case 'CANCELAR':
                         break
                     

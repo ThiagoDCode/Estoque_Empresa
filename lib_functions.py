@@ -18,10 +18,10 @@ def new_register():
             os.system('pause')
             continue
         serial = input('Número serial do item: ').strip()
-        quantity = EX.number_check('Quantidade para registro: ', type=int)
+        quantity = EX.number_check('Quantidade para registro: ', output_type=int)
         if not quantity:
             quantity = 0
-        price = EX.number_check('Preço do item: R$', type=float)
+        price = EX.number_check('Preço do item: R$', output_type=float)
         if not price:
             price = 0.0
     
@@ -42,16 +42,13 @@ def new_register():
             sleep(1.5)
         
         os.system('cls')
-        new_register = EX.validate_entry('Adicionar um novo registro ( S/N )? ', 'S', 'N')
-        if not new_register:
+        new_reg = EX.validate_entry('Adicionar um novo registro ( S/N )? ', 'S', 'N')
+        if not new_reg:
             break
 
 
 def consult_register():
     """ Faz a consulta dos dados no Banco de Dados SQL.
-
-    Args:
-        description_item (bool, optional): Se True, define a consulta por dado(item) específico. Defaults to False.
     """
     while True:
         os.system('cls')
@@ -98,8 +95,8 @@ def update_register():
         os.system('cls')
 
         try:
-            id = input('Digite o ID do registro a ser alterado: ')
-            response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id)
+            id_reg = input('Digite o ID do registro a ser alterado: ')
+            response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id_reg)
         except (Error, TypeError, ValueError):
             print(EX.error('\nEntrada inválida!\n'))
             sleep(1.5)
@@ -109,13 +106,13 @@ def update_register():
                 os.system('pause')
             else:
                 # PRINT -------------------------------------------------------------------
-                tabela(response, id=True)
+                tabela(response, id_reg=True)
                 # ------------------------------------------------------------------- PRINT
 
                 new_item = [input('Alterar descrição do item? ').strip(), 'item_identity']
                 new_serial = [input('Alterar serial do item? ').strip(), 'serial_item']
                 new_quantity = [EX.number_check('Alterar quantidade do registro? '), 'quantity']
-                new_price = [EX.number_check('Altear preço do item? ', type=float), 'price_unit']
+                new_price = [EX.number_check('Altear preço do item? ', output_type=float), 'price_unit']
 
                 apply_update = EX.validate_entry('\nAplicar atualização (S/N): ', 'S', 'N')
                 if apply_update:
@@ -124,7 +121,7 @@ def update_register():
                     for value, coluna in [new_item, new_serial, new_quantity, new_price]:
                         if value:
                             done_up = True
-                            tab_sql = f'UPDATE tb_estoque SET "{coluna}"="{value}" WHERE ID_item={id}'
+                            tab_sql = f'UPDATE tb_estoque SET "{coluna}"="{value}" WHERE ID_item={id_reg}'
                             ON.query(ON.connection_ON, tab_sql)
                 
                     if not done_up:
@@ -144,9 +141,9 @@ def delete_register():
         os.system('cls')
 
         try:
-            id = input('ID do registro a ser deletado: ')
-            response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id)
-        except (Error):
+            id_reg = input('ID do registro a ser deletado: ')
+            response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id_reg)
+        except Error:
             print('\nAÇÃO CANCELADA!'), sleep(1.5)
             break
         else:
@@ -155,12 +152,12 @@ def delete_register():
                 os.system('pause')
             else:
                 # PRINT -------------------------------------------------------------------
-                tabela(response, id=True)
+                tabela(response, id_reg=True)
                 # ------------------------------------------------------------------- PRINT
                 
                 delete = EX.validate_entry('Deletar registro (S/N): ', 'S', 'N')
                 if delete:
-                    tb_sql = f'DELETE FROM tb_estoque WHERE ID_item={id}'
+                    tb_sql = f'DELETE FROM tb_estoque WHERE ID_item={id_reg}'
                     ON.query(ON.connection_ON, tb_sql)
                 else:
                     print('\nAÇÃO CANCELADA!\n')
@@ -172,15 +169,15 @@ def delete_register():
             break
 
 
-def tabela(response_sql, id=False):
+def tabela(response_sql, id_reg=False):
     """ Função para impressão dos itens do Banco de Dados.
 
     Args:
         response_sql (list): Lista dos dados do retorno do SQL.
-        id (bool, optional): Se True, define a impressão de dado único. Defaults to False.
+        id_reg (bool, optional): Se True, define a impressão de dado único. Defaults to False.
     """
     print()
-    if id:
+    if id_reg:
         for resp in response_sql:
             print('=' * 60)
             print(f'|{resp[0]:^3}| {resp[1]:^30} |Serial N°: {resp[2]:^10}|')

@@ -2,7 +2,7 @@ from time import sleep
 import os
 
 
-def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
+def menu(*options: str, menu_title='OPÇÕES DE REGISTRO') -> str:
     opt_dict = {}
     for opt in options:
         opt_dict[opt.split(':')[0]] = opt.split(':')[1]
@@ -14,7 +14,7 @@ def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
         # PRINT ----------------------------------------------------------
         print(
             f'+{"=" * tamanho}+ \n'
-            f'|{menu:^{tamanho}}| \n'
+            f'|{menu_title:^{tamanho}}| \n'
             f'+{"=" * tamanho}+')
         for key, value in opt_dict.items():
             print(f'|{f" [{key}] - {value.capitalize()}":{tamanho}}|')
@@ -29,12 +29,12 @@ def menu(*options: str, menu='OPÇÕES DE REGISTRO') -> str:
         sleep(1)
 
 
-def number_check(txt:str, type=int):
+def number_check(txt: str, output_type=int):
     """ Verifica e válida entrada de números.
 
     Args:
         txt (str): Texto de exibição para o usuário.
-        type (_type_, optional): Determina o tipo de saída (int ou float). Defaults to int.
+        output_type (_type_, optional): Determina o tipo de saída (int ou float). Defaults to int.
 
     Returns:
         _type_: Retorna o número validado e convertido para o tipo escolhido (int/float)
@@ -45,7 +45,7 @@ def number_check(txt:str, type=int):
             break
         
         if entry.replace('.', '', 1).isdigit():
-            return type(entry)
+            return output_type(entry)
         else:
             print(error('\nEntrada inválido, tente novamente...\n'))
 
