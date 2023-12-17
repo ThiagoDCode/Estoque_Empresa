@@ -2,31 +2,38 @@ from time import sleep
 import os
 
 
-def menu(*options: str, menu_title='OPÇÕES DE REGISTRO') -> str:
-    opt_dict = {}
-    for opt in options:
-        opt_dict[opt.split(':')[0]] = opt.split(':')[1]
+def menu(*options, title="") -> int:
+    """
+    Menu dinâmico. Exemplo: ("Opção 1", "Opção 2", "Opção 3"...)
 
+    Args:
+        title (str, optional): Título para o Menu. Defaults to "".
+
+    Raises:
+        Exception: Retorna erro caso entrada inválida
+
+    Returns:
+        int: Retorna o número da opção
+    """
+    os.system("cls")
+    
+    print("+=============================+")
+    print(f"| {title.center(27)} |")
+    print("+=============================+")
+    for num, opt in enumerate(options):
+        print(f"| {f'[{num+1}] - {opt.upper()}':27} |")
+    print("+=============================+")
+    
     while True:
-        os.system('cls')
-    
-        tamanho = 30
-        # PRINT ----------------------------------------------------------
-        print(
-            f'+{"=" * tamanho}+ \n'
-            f'|{menu_title:^{tamanho}}| \n'
-            f'+{"=" * tamanho}+')
-        for key, value in opt_dict.items():
-            print(f'|{f" [{key}] - {value.capitalize()}":{tamanho}}|')
-        print(f'+{"=" * tamanho}+')
-        # ---------------------------------------------------------- PRINT
-
-        entry = input('digite a opção: ')
-        if opt_dict.get(entry):
-            return opt_dict[entry]
-    
-        print(error('Opção inválida, tente novamente...\n'))
-        sleep(1)
+        try:
+            resposta = int(input("> "))
+            if 0 < resposta <= len(options):
+                return resposta
+            raise Exception()
+        
+        except (ValueError, Exception):
+            print(error("ERRO! Opção inválida, tente novamente..."))
+            sleep(1)
 
 
 def number_check(txt: str, output_type=int):

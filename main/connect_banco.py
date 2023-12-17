@@ -7,7 +7,8 @@ from time import sleep
 
 # Conexão com o Banco
 def connect_banco():
-    caminho = 'db_estoque\\estoque.db'
+    caminho = "./estoque_empresa/main/db_estoque/estoque.db"
+    #caminho = 'db_estoque\\estoque.db'
     connection = None
 
     try:

@@ -5,32 +5,38 @@ import os
 
 
 while True:
-    match menu('1:NOVO REGISTRO',
-               '2:CONSULTAR REGISTRO',
-               '3:ATUALIZAR REGISTRO',
-               '4:DELETAR REGISTRO',
-               '5:DESCONECTAR'):
+    match menu(
+        "NOVO REGISTRO", 
+        "CONSULTAR REGISTRO", 
+        "ATUALIZAR REGISTRO", 
+        "DELETAR REGISTRO", 
+        "DESCONECTAR",
+        title="OPÇÕES DE REGISTRO"):
 
-        case 'DESCONECTAR':
+        case 5:  # DESCONECTAR
             os.system('cls')
             break
     
-        case 'NOVO REGISTRO':
+        case 1:  # NOVO REGISTRO
             func.new_register()
 
-        case 'CONSULTAR REGISTRO':
+        case 2:  # CONSULTAR REGISTRO
             while True:
-                match menu('1:CONSULTAR TABELA', '2:CANCELAR', menu_title='OPÇÕES DE CONSULTA'):
-                    case 'CANCELAR':
+                match menu(
+                    "CONSULTAR TABELA", 
+                    "CANCELAR", 
+                    title="OPÇÕES DE CONSULTA"):
+                    
+                    case 2:  # CANCELAR
                         break
                     
-                    case 'CONSULTAR TABELA':
+                    case 1:  # CONSULTAR TABELA
                         func.consult_register()
     
-        case 'ATUALIZAR REGISTRO':
+        case 3:  # ATUALIZAR REGISTRO
             func.update_register()
     
-        case 'DELETAR REGISTRO':
+        case 4:  # DELETAR REGISTRO
             func.delete_register()
 
 
