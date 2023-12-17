@@ -79,7 +79,7 @@ def consult_register():
                 # ------------------------------------------------------------------- PRINT
             
             except Error as erro:
-                print(EX.error(erro))
+                print(erro)
         
         else:
             try:
@@ -91,7 +91,7 @@ def consult_register():
                 # ------------------------------------------------------------------- PRINT
             
             except Error as erro:
-                print(EX.error(erro))
+                print(erro)
 
         os.system('cls')
         new_consult = EX.validate_entry('Nova consulta ( S/N )? ', 'S', 'N')

@@ -17,7 +17,7 @@ def connect_banco():
         sleep(1.5)
     
     except Error as erro:
-        print(EX.error(erro))
+        print(erro)
 
     return connection
 
@@ -33,7 +33,7 @@ def query(connection_db, sql):
         connection_db.commit()
     
     except Error as erro:
-        print(EX.error(erro))
+        print(erro)
         os.system('pause')
     
     else:
