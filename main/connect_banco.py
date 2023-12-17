@@ -5,9 +5,9 @@ from sqlite3 import Error
 from time import sleep
 
 
-# Conexão com o Banco
+# Conexão com o Banco de Dados
 def connect_banco():
-    caminho = 'db_estoque\\estoque.db'
+    caminho = "./estoque_empresa/main/db_estoque/estoque.db"
     connection = None
 
     try:
@@ -15,6 +15,7 @@ def connect_banco():
         os.system('cls')
         print('\nConexão Estabelecida! \n')
         sleep(1.5)
+    
     except Error as erro:
         print(EX.error(erro))
 
@@ -30,9 +31,11 @@ def query(connection_db, sql):
         connect = connection_db.cursor()
         connect.execute(sql)
         connection_db.commit()
+    
     except Error as erro:
         print(EX.error(erro))
         os.system('pause')
+    
     else:
         print('\nREGISTRO REALIZADO COM SUCESSO!\n')
         sleep(1.5)
