@@ -6,7 +6,8 @@ import os
 
 
 def new_register():
-    """ Adiciona novo item ao Banco de Dados
+    """ 
+    Função para adicionar novo item ao Banco de Dados
     """
 
     while True:
@@ -17,10 +18,13 @@ def new_register():
             print('\nÉ necessário preencher a descrição do item!\n')
             os.system('pause')
             continue
+        
         serial = input('Número serial do item: ').strip()
+        
         quantity = EX.number_check('Quantidade para registro: ', output_type=int)
         if not quantity:
             quantity = 0
+        
         price = EX.number_check('Preço do item: R$', output_type=float)
         if not price:
             price = 0.0
@@ -36,7 +40,9 @@ def new_register():
             )
             VALUES ('{description}', '{serial}', {quantity}, {price})
             """
+            
             ON.query(ON.connection_ON, tab_sql)
+        
         else:
             print('\nINSERT cancelado!\n')
             sleep(1.5)
@@ -48,8 +54,10 @@ def new_register():
 
 
 def consult_register():
-    """ Faz a consulta dos dados no Banco de Dados SQL.
+    """ 
+    Faz a consulta dos dados no Banco de Dados SQL.
     """
+    
     while True:
         os.system('cls')
     
@@ -61,24 +69,27 @@ def consult_register():
                 SELECT * FROM tb_estoque 
                     WHERE item_identity LIKE "%{description}%" 
                     OR serial_item LIKE "%{description}%"'''
-                response = ON.query_select(ON.connection_ON, tab_sql)
                 
+                response = ON.query_select(ON.connection_ON, tab_sql)
                 if not response:
                     print('\nRegistro não encontrado no Banco de Dados!\n')
                 
                 # PRINT -------------------------------------------------------------------
                 tabela(response)
                 # ------------------------------------------------------------------- PRINT
+            
             except Error as erro:
                 print(EX.error(erro))
+        
         else:
             try:
                 tab_sql = 'SELECT * FROM tb_estoque'
-                response = ON.query_select(ON.connection_ON, tab_sql)
                 
+                response = ON.query_select(ON.connection_ON, tab_sql)
                 # PRINT -------------------------------------------------------------------
                 tabela(response)
                 # ------------------------------------------------------------------- PRINT
+            
             except Error as erro:
                 print(EX.error(erro))
 
@@ -89,7 +100,8 @@ def consult_register():
 
 
 def update_register():
-    """ Faz a consulta no Banco de Dados para atualização do item.
+    """ 
+    Faz a consulta no Banco de Dados para atualização do item.
     """
     while True:
         os.system('cls')
@@ -97,13 +109,16 @@ def update_register():
         try:
             id_reg = input('Digite o ID do registro a ser alterado: ')
             response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id_reg)
+        
         except (Error, TypeError, ValueError):
             print(EX.error('\nEntrada inválida!\n'))
             sleep(1.5)
+        
         else:
             if not response:
                 print('\nID de registro não encontrado no Banco de Dados!\n')
                 os.system('pause')
+            
             else:
                 # PRINT -------------------------------------------------------------------
                 tabela(response, id_reg=True)
@@ -135,7 +150,8 @@ def update_register():
 
 
 def delete_register():
-    """ Consulta o Banco de Dados e deleta o registro desejado.
+    """ 
+    Consulta o Banco de Dados e deleta o registro desejado.
     """
     while True:
         os.system('cls')
@@ -143,13 +159,16 @@ def delete_register():
         try:
             id_reg = input('ID do registro a ser deletado: ')
             response = ON.query_select(ON.connection_ON, 'SELECT * FROM tb_estoque WHERE ID_item='+id_reg)
+        
         except Error:
             print('\nAÇÃO CANCELADA!'), sleep(1.5)
             break
+       
         else:
             if not response:
                 print('\nID de registro não encontrado no Banco de Dados!\n')
                 os.system('pause')
+            
             else:
                 # PRINT -------------------------------------------------------------------
                 tabela(response, id_reg=True)
@@ -170,25 +189,29 @@ def delete_register():
 
 
 def tabela(response_sql, id_reg=False):
-    """ Função para impressão dos itens do Banco de Dados.
+    """
+    Função para impressão dos itens do Banco de Dados.
 
     Args:
         response_sql (list): Lista dos dados do retorno do SQL.
         id_reg (bool, optional): Se True, define a impressão de dado único. Defaults to False.
     """
+    
     print()
     if id_reg:
         for resp in response_sql:
             print('=' * 60)
-            print(f'|{resp[0]:^3}| {resp[1]:^30} |Serial N°: {resp[2]:^10}|')
+            print(f'|{resp[0]:^3}| {resp[1]:<30} |Serial N°: {resp[2]:^10}|')
             print('-' * 60)
             print(f'Quantidade: {resp[3]:<4} Preço: R${resp[4]:<4.2f} \n')
+   
     else:
         limit = 5  # Limita a quantidade de itens exibidos por vez
         cont = 0
+        
         for resp in response_sql:
             print('=' * 60)
-            print(f'|{resp[0]:^3}| {resp[1]:^30} |Serial N°: {resp[2]:^10}|')
+            print(f'|{resp[0]:^3}| {resp[1]:<30} |Serial N°: {resp[2]:^10}|')
             print('-' * 60)
             print(f'Quantidade: {resp[3]:<4} Preço: R${resp[4]:<4.2f}\n')
             
@@ -197,6 +220,7 @@ def tabela(response_sql, id_reg=False):
                 cont = 0
                 os.system('pause')
                 os.system('cls')
+        
         print(' SEM MAIS RESULTADOS... '.center(60, '-'))
         print()
         os.system('pause')

@@ -46,6 +46,7 @@ def number_check(txt: str, output_type=int):
     Returns:
         _type_: Retorna o número validado e convertido para o tipo escolhido (int/float)
     """
+    
     while True:
         entry = input(txt).strip()
         if entry == '':
@@ -58,6 +59,18 @@ def number_check(txt: str, output_type=int):
 
 
 def validate_entry(txt: str, y, n):
+    """
+    Validação de entrada,
+
+    Args:
+        txt (str): Texto apresentado ao usuário
+        y (_type_): Parâmetro para True
+        n (_type_): Parâmetro para False
+
+    Returns:
+        bool: Retorna True ou False
+    """
+    
     while True:
         validate = input(txt).strip().upper()
         
